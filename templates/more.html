@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Checkup</title>
+    <style>
+        h1 {
+        position: relative;
+        text-align: center;
+        margin: 30px 0;
+        font-size: 4rem;
+        font-family: 'Poppins', sans-serif;
+        font-weight: bold;
+        color: #e7b4ffcb;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        background: linear-gradient(135deg, #0d0d0e, #0b0709, #a073f4);
+        
+        text-shadow: 
+            2px 2px 4px rgba(0, 0, 0, 0.3), 
+            0px 0px 20px rgba(255, 255, 255, 0.8);
+        animation: floatText 3s ease-in-out infinite;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    /* Shine Effect */
+    h1:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 150%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+        transform: skewX(-30deg);
+        animation: shine 3s infinite;
+        z-index: 2;
+    }
+
+    /* Glowing Halo Effect */
+    h1:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 120%;
+        height: 120%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+        filter: blur(40px);
+        z-index: -1;
+        animation: haloPulse 5s infinite alternate;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: url('ddd.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: #2c3e50;
+        min-height: 200vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    h1 {
+        text-align: center;
+        margin: 20px 0;
+        color: #800768;
+        text-shadow: 2px 2px 4px #7464e9;
+    }
+
+    #symptomList {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 20px;
+        margin: 20px auto;
+        padding: 20px;
+        max-width: 90%;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .symptom {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+        background: linear-gradient(135deg, #6c63ff, #c5c7f2);
+        color: #090338;
+        font-weight: bold;
+        font-size: 14px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+
+    .symptom:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .symptom span {
+        position: relative;
+        z-index: 1;
+    }
+
+    .selected {
+        background: linear-gradient(135deg, #c5cfff, #63a6e0);
+        color: #fff;
+        box-shadow: 0 6px 12px rgba(102, 56, 182, 0.4);
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 10px rgba(30, 69, 154, 0.844);
+        }
+        50% {
+            box-shadow: 0 0 20px rgba(34, 50, 139, 0.9);
+        }
+        100% {
+            box-shadow: 0 0 10px rgba(56, 85, 182, 0.7);
+        }
+    }
+
+    button {
+        display: block;
+        margin: 20px auto;
+        padding: 15px 25px;
+        background: linear-gradient(135deg, #b81e38, #fe60a2);
+        color: rgb(182, 182, 251);
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    button:hover {
+        background: linear-gradient(135deg, #7d3335, #fecfef);
+        transform: scale(1.1);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    #results {
+        margin: 20px auto;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+        max-width: 95%;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .result-box {
+        background: linear-gradient(135deg, #1c1c3b, #47477b);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        border-left: 5px solid #8e8ef9;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        color: #e8e8ff;
+    }
+
+    .result-box:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .result-box h4 {
+        margin: 0 0 10px;
+        font-size: 18px;
+        color: #fff;
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+
+    .result-box p {
+        margin: 5px 0;
+        font-size: 14px;
+        color: #d0d0ff;
+        display: none;
+    }
+
+    .result-box.active p {
+        display: block;
+    }
+
+    .result-box:nth-child(odd) {
+        border-left: 5px solid #f89b9b;
+    }
+
+    .result-box:nth-child(even) {
+        border-left: 5px solid #a3f8e6;
+    }
+    </style>
+    <script>
+        function loadSymptoms() {
+            fetch('/symptoms')
+                .then(response => response.json())
+                .then(data => {
+                    const symptomList = document.getElementById('symptomList');
+                    symptomList.innerHTML = '';
+                    data.forEach(symptom => {
+                        const div = document.createElement('div');
+                        div.className = 'symptom';
+                        div.innerHTML = `<span>${symptom}</span>`;
+                        div.onclick = () => toggleSymptom(div, symptom);
+                        symptomList.appendChild(div);
+                    });
+                });
+        }
+
+        const selectedSymptoms = new Set();
+
+        function toggleSymptom(element, symptom) {
+            if (selectedSymptoms.has(symptom)) {
+                selectedSymptoms.delete(symptom);
+                element.classList.remove('selected');
+            } else {
+                selectedSymptoms.add(symptom);
+                element.classList.add('selected');
+            }
+        }
+
+        function analyzeSymptoms() {
+            fetch('/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ symptoms: Array.from(selectedSymptoms) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = '';
+
+                if (data.observations.length > 0) {
+                    const box = createResultBox('Possible Problems', data.observations);
+                    resultsDiv.appendChild(box);
+                }
+
+                if (data.recommendations.length > 0) {
+                    const box = createResultBox('Recommended Medicines', data.recommendations);
+                    resultsDiv.appendChild(box);
+                }
+
+                if (data.food_recommendations.length > 0) {
+                    const box = createResultBox('Food Recommendations', data.food_recommendations.map(food => {
+                        return `<strong>English:</strong> ${food.English} <br> <strong>Hindi:</strong> ${food.Hindi}`;
+                    }));
+                    resultsDiv.appendChild(box);
+                }
+
+                if (data.home_remedies.length > 0) {
+                    const box = createResultBox('Home Remedies', data.home_remedies);
+                    resultsDiv.appendChild(box);
+                }
+            });
+        }
+
+        function createResultBox(title, items) {
+            const box = document.createElement('div');
+            box.className = 'result-box';
+
+            const heading = document.createElement('h4');
+            heading.textContent = title;
+            heading.onclick = () => box.classList.toggle('active');
+            box.appendChild(heading);
+
+            items.forEach(item => {
+                const p = document.createElement('p');
+                p.innerHTML = `<span>💡</span> ${item}`;
+                box.appendChild(p);
+            });
+
+            return box;
+        }
+    </script>
+</head>
+<body onload="loadSymptoms()">
+    <h1>Health Checkup</h1>
+    <div id="symptomList"></div>
+    <button onclick="analyzeSymptoms()">Analyze Symptoms</button>
+    <div id="results"></div>
+</body>
+</html>
